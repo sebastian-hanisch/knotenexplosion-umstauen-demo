@@ -7,7 +7,7 @@ Viertes Stück der Konzepte-Reihe **„Umstauen: Untergrenze und Suche“** für
 
 ## Warum dieses Problem
 
-Eine exakte Suche ist leicht hinzuschreiben und schwer zu bändigen. Erst die Knotenzahl macht sichtbar, warum: Mit jedem blockierenden Container wächst der Baum um ein Vielfaches. Die Messung trennt zwei Gegenmittel, die oft verwechselt werden: die **Schranke aus der besten bisherigen Lösung** (wirkt stark) und die **Reihenfolge der Kinder** (wirkt im Median schwach).
+Eine exakte Suche ist leicht hinzuschreiben und schwer zu bändigen. Erst die Knotenzahl macht sichtbar, warum: Mit jedem blockierenden Container wächst der Baum um ein Vielfaches. Die Messung vergleicht zwei Gegenmittel, die oft verwechselt werden: die **Schranke aus der besten bisherigen Lösung** (wirkt zusammen mit einer guten Reihenfolge stark) und die **Reihenfolge der Kinder** (Stapelnummern gegen engste Passung wirkt im Median schwach, eine schlechte Reihenfolge kostet im Median bis zum 5,11-Fachen). Der Vergleich beider ist nicht sauber getrennt: Die Schranke wird nur zusammen mit der engsten Passung gemessen.
 
 ## Modell
 
@@ -40,12 +40,12 @@ Das Verhältnis der letzten Spalte ist der Median über die Buchten, in denen **
 
 | Frage | Befund |
 |---|---|
-| **Wie wächst die Knotenzahl mit den Blockern?** (3 × 3, 100 Buchten) | Median der Knoten bei 1 / 2 / 3 / 4 / 5 / 6 blockierenden Containern (7 / 12 / 30 / 27 / 20 / 4 Buchten): volle Aufzählung 5 / 23 / 125 / 527 / 1 285 / 2 883, Branch and Bound mit engster Passung 3 / 7 / 17 / 57 / 134 / 128,5. Verhältnisse aufeinanderfolgender Mediane: 4,6 / 5,4 / 4,2 / 2,4 / 2,2 bei der vollen Aufzählung und 2,3 / 2,4 / 3,4 / 2,4 / 1,0 bei Branch and Bound; am stärksten bei wenigen Blockern. |
-| **Was geschieht bei 4 × 3?** (40 Buchten) | Die vollen Aufzählungen sind ab 5 Blockern zum Teil über dem Limit: 2 von 6 bei 5, 4 von 8 bei 6, 4 von 4 bei 7 Blockern. Ein Wachstumsverhältnis lässt sich dort nicht angeben (Mediane der Stufen mit 1 bis 6 Buchten, zensiert). Branch and Bound mit engster Passung bleibt in allen 40 Buchten unter dem Limit (Median 654,5 bei 5, 1 337,5 bei 6, 1 912 bei 7 Blockern). |
-| **Was bringt die Schranke aus der besten Lösung?** | Das 5,7- bis 202-Fache der Knoten (Median über die Buchten, in denen beide fertig wurden): 5,7 / 6,5 bei 4 × 2 und 3 × 3, 40,3 bei 3 × 4, 53,9 bei 5 × 2, 76,4 bei 4 × 3, 202,4 bei 5 × 3 (nur 5 Buchten); nur bei der kleinsten Zelle (3 × 2, 6 Container) ist es 1,8. |
+| **Wie wächst die Knotenzahl mit den Blockern?** (3 × 3, 100 Buchten) | Median der Knoten bei 1 / 2 / 3 / 4 / 5 / 6 blockierenden Containern (7 / 12 / 30 / 27 / 20 / 4 Buchten): volle Aufzählung 5 / 23 / 125 / 527 / 1 285 / 2 883, Branch and Bound mit engster Passung 3 / 7 / 17 / 57 / 134 / 128,5. Verhältnisse aufeinanderfolgender Mediane: 4,6 / 5,4 / 4,2 / 2,4 / 2,2 bei der vollen Aufzählung und 2,3 / 2,4 / 3,4 / 2,4 / 1,0 bei Branch and Bound; am stärksten bei den ersten Übergängen (bis 4 Blocker), danach flacher. Die Stufen bestehen aus verschiedenen Buchten (kein Wachstum an einer Bucht); die Stufen mit 1, 5 und 6 Blockern beruhen auf 7, 20 und 4 Buchten, das letzte Verhältnis (1,0) auf 4. |
+| **Was geschieht bei 4 × 3?** (40 Buchten) | Die vollen Aufzählungen sind ab 5 Blockern zum Teil über dem Limit: 2 von 6 bei 5, 4 von 8 bei 6, 4 von 4 bei 7 Blockern. Ein Wachstumsverhältnis lässt sich dort nicht angeben (Mediane der Stufen mit 1 bis 11 Buchten, zensiert). Branch and Bound mit engster Passung bleibt in allen 40 Buchten unter dem Limit (Median 654,5 bei 5, 1 337,5 bei 6, 1 912 bei 7 Blockern). |
+| **Was bringt die Schranke aus der besten Lösung?** | Das 5,7- bis 202-Fache der Knoten (Median über die Buchten, in denen beide fertig wurden): 5,7 / 6,5 bei 4 × 2 und 3 × 3, 40,3 bei 3 × 4, 53,9 bei 5 × 2, 76,4 bei 4 × 3, 202,4 bei 5 × 3 (nur 5 Buchten); nur bei der kleinsten Zelle (3 × 2, 6 Container) ist es 1,8. Verglichen wird die volle Aufzählung mit Branch and Bound mit engster Passung, also Schranke und gute Reihenfolge zusammen; gegen „schlechteste zuerst“ ist der Gewinn kleiner (4 × 3: Median 3 611,5 gegen 708,5 Knoten). |
 | **Was bringt die Reihenfolge der Kinder?** | Im Median wenig: Stapelnummern gegen engste Passung das 1,00- bis 1,62-Fache, schlechteste gegen engste das 1,56- bis 5,11-Fache. Das ist **keine** Größenordnung; nur einzelne Buchten erreichen das 16,9-Fache (5 × 3), 14,9-Fache (4 × 3), 12,6-Fache (5 × 2). |
 | **Wo gibt die volle Aufzählung auf?** | Über 1 000 000 Knoten: 0 von 100 bei 3 × 2, 4 × 2 und 3 × 3, 1 von 60 bei 5 × 2, 0 von 40 bei 3 × 4, **10 von 40 bei 4 × 3**, **15 von 20 bei 5 × 3**. Branch and Bound mit engster Passung bleibt in allen Zellen darunter, die Variante „schlechteste zuerst“ gibt bei 5 × 3 in 1 von 20 auf. |
-| **Wie wirkt der Platz?** (60 Buchten, Platz 1 / 2 / 3 / 4) | 3 × 3: Median der vollen Aufzählung 71,5 / 217 / 235 / 235, mit engster Passung 17 / 33 / 33 / 33 (Mittel der vollen Aufzählung 207 / 1 093 / 1 889 / 2 003). 4 × 2: Median 40 in allen vier, mit engster Passung 7 (Mittel 271 / 740 / 819 / 819). Ein Hub mehr Platz erweitert den Baum bis Platz 2 bis 3; ab Platz 3 ändern sich die Mediane nicht mehr (die Mittel bei 3 × 3 noch leicht). |
+| **Wie wirkt der Platz?** (60 Buchten, Platz 1 / 2 / 3 / 4) | 3 × 3: Median der vollen Aufzählung 71,5 / 217 / 235 / 235, mit engster Passung 17 / 33 / 33 / 33 (Mittel der vollen Aufzählung 207 / 1 093 / 1 889 / 2 003). 4 × 2: Median 40 in allen vier, mit engster Passung 7 (Mittel der vollen Aufzählung 271 / 740 / 819 / 819). Ein Hub mehr Platz erweitert den Baum bis etwa Platz 3 (bei 4 × 2 im Mittel, nicht im Median); ab Platz 3 ändern sich die Mediane nicht mehr (die Mittel bei 3 × 3 noch leicht). |
 | **Die Mini-Bucht** | 3 Stapel × 2 Lagen, von unten nach oben (1, 4), (5, 2), (6, 3), Höchsthöhe 4: nur die 4 blockiert (Untergrenze 1). Volle Aufzählung **9 Knoten, 5 Blätter**, Optimum 2: Die 4 landet auf Stapel 2 über der 2 oder auf Stapel 3 über der 3 und blockiert dort wieder. Branch and Bound: Stapelnummern 5 Knoten (1 Blatt), engste Passung 5 (2 Blätter), schlechteste zuerst 7 (3 Blätter). |
 | **Das Gegenbeispiel aus Stück 1** | (3, 6), (2, 4), (1, 5): volle Aufzählung **153 Knoten, 77 Blätter**, Optimum 4; Branch and Bound Stapelnummern 47, engste Passung 27, schlechteste zuerst 53. Der erste Tauchgang mit engster Passung hat 5 Hübe: die Regel aus Stück 1. |
 
@@ -53,10 +53,10 @@ Das Verhältnis der letzten Spalte ist der Median über die Buchten, in denen **
 
 ## Ehrliche Grenzen
 
-- **Ohne Untergrenze, Zustandsmerken und Symmetriebruch.** Das ist die Absicht. Mit ihnen schrumpft der Baum um weitere Größenordnungen; das zeigen die folgenden Stücke, hier ist es nicht gemessen.
+- **Ohne Untergrenze, Zustandsmerken und Symmetriebruch.** Das ist die Absicht. Mit ihnen schrumpft der Baum weiter (in einer Vorab-Messung im Median um etwa das 2- bis 10-Fache gegenüber Branch and Bound mit engster Passung); das zeigen die folgenden Stücke, hier ist es nicht gemessen.
 - **Knotenlimit statt Zeitlimit.** Knoten pro Sekunde und alle Laufzeiten sind nicht gemessen. Läufe über dem Limit fehlen in den Medianen; sie sind dann nur Untergrenzen der wahren Mediane.
 - **Große Zellen mit wenigen Buchten:** 5 × 2 mit 60, 4 × 3 und 3 × 4 mit 40, 5 × 3 mit 20 Buchten. Der Median der Schrankenwirkung bei 5 × 3 beruht auf 5 Buchten.
-- **Wachstum je Blocker nur für 3 × 3 belegt;** bei 4 × 3 ist es zensiert. Aus den Messreihen folgt kein Gesetz.
+- **Wachstum je Blocker nur für 3 × 3 belegt;** bei 4 × 3 ist es zensiert. Die Mediane der Stufen stammen aus verschiedenen Buchten, keine Messung an einer Bucht; Stufen mit wenigen Buchten (6 Blocker: 4) sind grob. Aus den Messreihen folgt kein Gesetz.
 - **Nur restricted, nur volle Buchten mit gleich hohen Stapeln, Platz 2 in der Tabelle.** Mit anderer Hubmenge (Stück 3) oder anderer Füllung ändern sich die Knotenzahlen.
 - **Die Reihenfolge-Aussage gilt für den Median.** Einzelne Buchten reagieren bis zum 16,9-Fachen; eine Garantie für die Reihenfolge gibt es nicht.
 - **Zahlen aus Zufallsbuchten:** feste Buchten aus der Zufallsfolge von Python (`random.shuffle`), keine Messung an einem echten Terminal oder Lager; die CI prüft die Zahlen unter Linux.
@@ -117,7 +117,7 @@ pip install -r requirements-dev.txt
 pytest tests/ -v
 ```
 
-98 Tests, rund eine Minute.
+98 Tests, rund 145 Sekunden (auf dem Entwicklungsrechner gemessen).
 
 Gebaut mit Streamlit und Plotly.
 

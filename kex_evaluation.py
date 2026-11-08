@@ -179,7 +179,7 @@ def verdict_bound(stats: dict) -> tuple[str, str]:
     b, i, a = stats["bound"], stats["index_tight"], stats["anti_tight"]
     if b["median"] is None:
         return "warning", "In dieser Zelle wurde keine volle Aufzählung fertig: Der Vergleich ist so nicht möglich."
-    text = (f"Die Schranke aus der besten Lösung spart im Median das {factor_text(b['median'])}-Fache der Knoten (volle Aufzählung gegen Branch and Bound mit engster Passung, "
+    text = (f"Die Schranke aus der besten Lösung spart im Median das {factor_text(b['median'])}-Fache der Knoten (volle Aufzählung gegen Branch and Bound mit engster Passung, also Schranke und gute Reihenfolge zusammen; "
             f"{b['n']} Buchten). Die Reihenfolge der Kinder bringt im Median das {factor_text(i['median'])}-Fache (Stapelnummern gegen engste Passung) bzw. "
             f"das {factor_text(a['median'])}-Fache (schlechteste gegen engste Passung, Maximum {factor_text(a['max'])}).")
     if b["median"] >= C.BOUND_STRONG:
@@ -224,7 +224,7 @@ def space_points(bands: dict, stacks: int, layers: int) -> list[dict]:
     pts = []
     for extra in range(C.EXTRA_MIN, C.EXTRA_MAX + 1):
         st = bands["platz"][space_key(stacks, layers, extra)]
-        pts.append({"extra": extra, "none": st["variants"]["none/index"]["median"], "tight": st["variants"]["best/tight"]["median"], "n": st["n"]})
+        pts.append({"extra": extra, "none": st["variants"]["none/index"]["median"], "mean": st["variants"]["none/index"]["mean"], "tight": st["variants"]["best/tight"]["median"], "n": st["n"]})
     return pts
 
 
@@ -235,4 +235,9 @@ def verdict_space(points: list[dict], stacks: int, layers: int) -> tuple[str, st
             f"{num_f(last['none'])}; Branch and Bound mit engster Passung {num_f(first['tight'])} bzw. {num_f(last['tight'])}.")
     if first["none"] > 0 and last["none"] / first["none"] >= C.SPACE_STEP:
         return "info", text + " Mehr Platz vergrößert den Baum."
-    return "info", text + " Der Platz ändert hier wenig."
+    m1, m2 = first.get("mean"), last.get("mean")
+    if m1 and m2 and m2 / m1 >= C.SPACE_STEP:
+        return "info", text + f" Der Median ändert sich hier wenig, das Mittel der vollen Aufzählung wächst von {num(round(m1))} auf {num(round(m2))}."
+    if m1 and m2:
+        return "info", text + " Median und Mittel der vollen Aufzählung ändern sich hier wenig."
+    return "info", text + " Der Median ändert sich hier wenig."

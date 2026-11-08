@@ -120,5 +120,10 @@ def test_space_verdict_and_points():
     kind, text = ev.verdict_space(pts, 3, 3)
     assert kind == "info" and "Bei 3 Stapeln und 3 Lagen braucht die volle Aufzählung bei Platz 1 im Median 71,5 Knoten, bei Platz 4 235; Branch and Bound mit engster Passung 17 bzw. 33." in text
     assert "vergrößert den Baum" in text
-    assert "wenig" in ev.verdict_space([{"extra": 1, "none": 40.0, "tight": 7.0, "n": 60}, {"extra": 4, "none": 40.0, "tight": 7.0, "n": 60}], 4, 2)[1]
+    assert "Der Median ändert sich hier wenig." in ev.verdict_space([{"extra": 1, "none": 40.0, "tight": 7.0, "n": 60}, {"extra": 4, "none": 40.0, "tight": 7.0, "n": 60}], 4, 2)[1]   # ohne Mittel
+    grows = ev.verdict_space([{"extra": 1, "none": 40.0, "mean": 270.65, "tight": 7.0, "n": 60}, {"extra": 4, "none": 40.0, "mean": 819.45, "tight": 7.0, "n": 60}], 4, 2)[1]
+    assert "Der Median ändert sich hier wenig, das Mittel der vollen Aufzählung wächst von 271 auf 819." in grows
+    flat = ev.verdict_space([{"extra": 1, "none": 40.0, "mean": 100.0, "tight": 7.0, "n": 60}, {"extra": 4, "none": 40.0, "mean": 120.0, "tight": 7.0, "n": 60}], 4, 2)[1]
+    assert "Median und Mittel der vollen Aufzählung ändern sich hier wenig." in flat
+    assert "wächst von 271 auf 819" in ev.verdict_space(ev.space_points(ev.load_bands(), 4, 2), 4, 2)[1]
     assert "vergrößert" in ev.verdict_space([{"extra": 1, "none": 100.0, "tight": 7.0, "n": 60}, {"extra": 4, "none": 150.0, "tight": 7.0, "n": 60}], 4, 2)[1]   # genau das 1,5-Fache zählt

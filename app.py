@@ -93,7 +93,7 @@ with st.sidebar:
     stacks = st.slider("Stapel", *bounds("stacks_slider"), key="stacks_slider", help="Wie viele Stapel die Bucht hat.")
     layers = st.slider("Lagen je Stapel", *bounds("layers_slider"), key="layers_slider", help="So viele Container stehen anfangs auf jedem Stapel.")
     extra = st.slider("Platz (Lagen über der Anfangshöhe)", *bounds("extra_slider"), key="extra_slider",
-                      help="Höchsthöhe = Lagen + Platz. Standard 2. Mehr Platz vergrößert den Suchbaum (nur bis Platz 2 gemessen).")
+                      help="Höchsthöhe = Lagen + Platz. Standard 2. Mehr Platz vergrößert den Suchbaum, in den Messungen bis etwa Platz 3 (gemessen bis Platz 4).")
     seed = st.number_input("Bucht-Nummer (Seed)", *bounds("seed_input"), key="seed_input", step=1, help="Die Nummer bestimmt, wie die Abrufnummern auf die Plätze verteilt sind.")
     st.button("🎲 Neue Bucht würfeln", width="stretch", on_click=randomize_seed)
 
@@ -183,7 +183,7 @@ st.markdown("---")
 
 st.subheader("🔬 Experiment: Wie wächst die Knotenzahl mit den Blockern?")
 growth = bands["wachstum"]
-st.caption("Median der Knoten je Zahl der blockierenden Container, aus den Buchten der Tabelle; Rauten: ein Teil der Läufe lag über dem Limit, der Median ist dann nur eine Untergrenze.")
+st.caption("Median der Knoten je Zahl der blockierenden Container, aus den Buchten der Tabelle (die Stufen bestehen aus verschiedenen Buchten, keine Messung an einer Bucht); Rauten:ein Teil der Läufe lag über dem Limit, der Median ist dann nur eine Untergrenze.")
 st.plotly_chart(build_growth({f"{k.replace(',', ' × ')}": v for k, v in growth.items()}), width="stretch", key="chart_growth")
 g33 = growth["3,3"]
 half = half_over_from(growth["4,3"], "none")
@@ -222,11 +222,11 @@ st.markdown(
     """
 | Annahme | Was passiert, wenn sie verletzt ist | Wer setzt an |
 |---|---|---|
-| **Ohne Untergrenze, Zustandsmerken und Symmetriebruch** | Das ist die Absicht: so zeigt die Explosion sich am deutlichsten. Mit ihnen schrumpft der Baum um weitere Größenordnungen; hier nicht gemessen. | die nächsten Stücke der Reihe |
+| **Ohne Untergrenze, Zustandsmerken und Symmetriebruch** | Das ist die Absicht: so zeigt die Explosion sich am deutlichsten. Mit ihnen schrumpft der Baum weiter (in einer Vorab-Messung im Median um etwa das 2- bis 10-Fache gegenüber Branch and Bound mit engster Passung); hier nicht gemessen. | die nächsten Stücke der Reihe |
 | **Knotenlimit statt Zeitlimit** | Läufe über dem Limit fehlen in den Medianen, die Mediane sind dann Untergrenzen der wahren Mediane; Knoten pro Sekunde und Laufzeiten sind nicht gemessen. | – |
 | **Große Zellen mit wenigen Buchten** | 5 × 2 mit 60, 4 × 3 und 3 × 4 mit 40, 5 × 3 mit 20 Buchten: die Mediane dort sind grob. | – |
 | **Nur restricted, nur volle Buchten, Platz 2 in der Tabelle** | Mit anderer Hubmenge (Stück 3) oder anderer Füllung ändern sich die Knotenzahlen. | – |
-| **Wachstum je Blocker nur für 3 × 3 belegt** | Bei 4 × 3 sind die Mediane ab 5 Blockern zensiert; ein Gesetz folgt daraus nicht. | – |
+| **Wachstum je Blocker nur für 3 × 3 belegt** | Bei 4 × 3 sind die Mediane ab 5 Blockern zensiert; die Stufen bestehen aus verschiedenen Buchten (bei 3 × 3 und 6 Blockern aus 4); ein Gesetz folgt daraus nicht. | – |
 | **Zahlen aus Zufallsbuchten** | Größenordnungen aus festen Buchten, keine Messung an einem echten Terminal oder Lager. | – |
 """
 )
